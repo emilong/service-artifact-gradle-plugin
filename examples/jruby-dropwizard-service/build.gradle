@@ -1,0 +1,38 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+          url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath 'gradle.plugin.com.github.lookout:service-artifact-plugin:0.2.0'
+    }
+}
+
+apply plugin: 'com.github.lookout.service-artifact'
+
+version = service.version('1.0')
+description = 'A sample JRuby service to built into an artifact using Dropwizard'
+group = 'com.github.lookout.service-artifact'
+
+service {
+    jruby {
+    }
+}
+
+serviceJar { 
+    manifest { attributes('Main-Class': 'rack.RackApplication') }
+    mergeServiceFiles()
+}
+
+dependencies {
+    gems "rubygems:sinatra:1.4.6"
+
+    compile "io.dropwizard:dropwizard-core:0.8.+"
+    compile "org.jruby.rack:jruby-rack:1.1.+"
+
+    jrubyJar "io.dropwizard:dropwizard-core:0.8.+"
+    jrubyJar "org.jruby.rack:jruby-rack:1.1.+"
+}
